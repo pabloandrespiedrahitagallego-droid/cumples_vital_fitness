@@ -15,15 +15,12 @@
   --grid:#e9e7ff;
 }
 
-*{
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
-}
+*{ box-sizing:border-box; font-family:'Poppins',sans-serif; }
 
 html, body{
   margin:0;
   padding:0;
-  height:auto;          /* 🔑 */
+  height:auto;
 }
 
 body{
@@ -36,27 +33,25 @@ body{
   max-width:1100px;
   margin:auto;
   background:var(--card);
-  border-radius:22px;
-  padding:12px;
-  box-shadow:0 20px 40px rgba(80,80,150,.16);
+  border-radius:20px;
+  padding:10px;
+  box-shadow:0 16px 32px rgba(80,80,150,.14);
 }
 
 h1{
   margin:0 0 6px;
-  font-size:1.25rem;
+  font-size:1.2rem;
   color:var(--title);
 }
 
-/* ===== CALENDARIO ===== */
-.fc{
-  background:transparent;
-}
+/* CALENDARIO */
+.fc{ background:transparent; }
 
 .fc-view-harness{
   overflow:hidden;
 }
 
-/* GRID REDONDEADO (MES) */
+/* GRID MES */
 .fc-scrollgrid,
 .fc-scrollgrid table{
   border-collapse:separate!important;
@@ -65,7 +60,7 @@ h1{
 
 .fc-scrollgrid td,
 .fc-scrollgrid th{
-  border-radius:12px;
+  border-radius:10px;
   border:1px solid var(--grid)!important;
   background:#fafaff;
 }
@@ -73,8 +68,8 @@ h1{
 /* CELDAS MES */
 .fc-daygrid-day,
 .fc-daygrid-day-frame{
-  min-height:72px!important;
-  max-height:72px!important;
+  min-height:70px!important;
+  max-height:70px!important;
   padding:3px;
   overflow:visible!important;
 }
@@ -85,12 +80,10 @@ h1{
 }
 
 /* TOOLBAR */
-.fc-toolbar{
-  margin-bottom:4px!important;
-}
+.fc-toolbar{ margin-bottom:4px!important; }
 
 .fc-toolbar-title{
-  font-size:1rem;
+  font-size:.95rem;
   font-weight:700;
 }
 
@@ -111,7 +104,7 @@ h1{
   padding:0!important;
 }
 
-/* ===== NUBES ===== */
+/* NUBES */
 .cloud{
   margin-top:2px;
   padding:3px 6px;
@@ -120,44 +113,23 @@ h1{
   font-weight:700;
   color:#3f3f46;
   box-shadow:0 6px 12px rgba(0,0,0,.16);
-  position:relative;
 }
 
-/* Colores */
+/* COLORES */
 .c1{background:#c7d2fe}
 .c2{background:#fecdd3}
 .c3{background:#bbf7d0}
 .c4{background:#fde68a}
 .c5{background:#ddd6fe}
 
-/* ===== MOBILE (VISTA SEMANA) ===== */
-@media(max-width:768px){
+/* ===== SEMANA (MÓVIL) ===== */
+.fc-timegrid-slot,
+.fc-timegrid-axis{
+  display:none!important;
+}
 
-  .wrapper{
-    padding:10px;
-  }
-
-  /* Semana sin horas */
-  .fc-timegrid-slot{
-    display:none!important;
-  }
-
-  .fc-timegrid-axis{
-    display:none!important;
-  }
-
-  .fc-timegrid-event{
-    margin:2px;
-  }
-
-  .fc-timegrid-day-frame{
-    padding:4px;
-  }
-
-  .cloud{
-    font-size:.55rem;
-    padding:3px 6px;
-  }
+.fc-timegrid-day-frame{
+  padding:4px;
 }
 </style>
 </head>
@@ -200,36 +172,48 @@ function buildEvents(year){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  const isMobile = window.innerWidth < 768;
 
-  const calendar = new FullCalendar.Calendar(
-    document.getElementById("calendar"),
-    {
-      locale:"es",
-      initialView: isMobile ? "timeGridWeek" : "dayGridMonth",
-      fixedWeekCount: !isMobile,
-      showNonCurrentDates: !isMobile,
-      height:"auto",
-      events: buildEvents(new Date().getFullYear()),
-      headerToolbar:{
-        left:"prev,today,next",
-        center:"title",
-        right:""
-      },
-      datesSet(info){
-        calendar.removeAllEvents();
-        calendar.addEventSource(buildEvents(info.start.getFullYear()));
-      },
-      eventContent(arg){
-        const color=arg.event.classNames[0];
-        return{
-          html:`<div class="cloud ${color}">🎂 ${arg.event.extendedProps.nombre}</div>`
-        };
-      }
+  const calendarEl = document.getElementById("calendar");
+
+  const calendar = new FullCalendar.Calendar(calendarEl,{
+    locale:"es",
+    initialView:"dayGridMonth",
+    fixedWeekCount:true,
+    showNonCurrentDates:false,
+    height:"auto",
+    events:buildEvents(new Date().getFullYear()),
+    headerToolbar:{
+      left:"prev,today,next",
+      center:"title",
+      right:""
+    },
+    datesSet(info){
+      calendar.removeAllEvents();
+      calendar.addEventSource(buildEvents(info.start.getFullYear()));
+    },
+    eventContent(arg){
+      const color=arg.event.classNames[0];
+      return{
+        html:`<div class="cloud ${color}">🎂 ${arg.event.extendedProps.nombre}</div>`
+      };
     }
-  );
+  });
 
   calendar.render();
+
+  /* 🔥 FORZAR SEMANA EN MÓVIL (CLAVE) */
+  const mq = window.matchMedia("(max-width: 768px)");
+
+  function handleView(e){
+    if(e.matches){
+      calendar.changeView("timeGridWeek");
+    }else{
+      calendar.changeView("dayGridMonth");
+    }
+  }
+
+  mq.addEventListener("change",handleView);
+  handleView(mq);
 });
 </script>
 
