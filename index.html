@@ -3,15 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎂 Cumples</title>
+<title>🎂 Cumpleaños</title>
 
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap" rel="stylesheet">
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{ box-sizing:border-box; }
 
 html, body{
   margin:0;
@@ -21,64 +19,59 @@ html, body{
   font-family:'Fredoka', sans-serif;
 }
 
-/* Fondo caricaturesco */
+/* Fondo formal */
 body{
   background:
-    radial-gradient(circle at 20% 20%, #ffd6ff 12%, transparent 13%),
-    radial-gradient(circle at 80% 30%, #caffbf 12%, transparent 13%),
-    radial-gradient(circle at 40% 80%, #bde0fe 12%, transparent 13%),
-    #ffe5ec;
-  background-size:60px 60px;
+    linear-gradient(180deg, #f4f5f7, #e9ebef);
   display:flex;
   align-items:center;
   justify-content:center;
 }
 
-/* App tipo sticker */
+/* Contenedor */
 .app{
   width:100%;
   max-width:360px;
   height:100%;
   max-height:560px;
-  background:#fff;
-  border-radius:40px;
+  background:#ffffff;
+  border-radius:28px;
   padding:8px;
-  box-shadow:0 18px 35px rgba(0,0,0,.25);
+  box-shadow:0 14px 30px rgba(0,0,0,.18);
   display:flex;
   flex-direction:column;
-  overflow:hidden; /* 🔒 */
+  overflow:hidden;
 }
 
-/* Header */
+/* Header sobrio */
 .header{
-  background:#ffafcc;
-  border-radius:30px;
-  padding:10px 6px;
+  background:#f1f3f6;
+  border-radius:20px;
+  padding:8px;
   text-align:center;
   margin-bottom:6px;
 }
 
 .header h1{
   margin:0;
-  font-size:1.1rem;
+  font-size:1.05rem;
 }
 
 .header span{
   font-size:0.65rem;
+  opacity:.6;
 }
 
 /* Calendario */
 #calendar{
   flex:1;
-  background:#fff;
-  border-radius:30px;
+  border-radius:22px;
   padding:4px;
-  overflow:hidden;
 }
 
-/* FullCalendar ULTRA COMPACTO */
+/* FullCalendar compacto */
 .fc{
-  font-size:0.58rem;
+  font-size:0.6rem;
 }
 
 .fc-toolbar{
@@ -86,31 +79,42 @@ body{
 }
 
 .fc-toolbar-title{
-  font-size:0.8rem !important;
+  font-size:0.85rem !important;
 }
 
 .fc-button{
-  background:#a2d2ff !important;
+  background:#dee2e6 !important;
   border:none !important;
-  border-radius:20px !important;
+  border-radius:12px !important;
   padding:2px 6px !important;
+  color:#333 !important;
 }
 
 .fc-daygrid-day-number{
   font-size:0.55rem;
-}
-
-.fc-daygrid-event{
-  background:#ffbe0b !important;
-  border:none !important;
-  border-radius:14px;
-  padding:0 3px;
-  font-size:0.5rem;
+  color:#555;
 }
 
 .fc-theme-standard td,
 .fc-theme-standard th{
   border:none;
+}
+
+/* EVENTO CÓMIC 🎂 */
+.fc-daygrid-event{
+  background:#fff3cd !important;
+  border:2px dashed #ffb703 !important;
+  border-radius:16px;
+  padding:1px 4px;
+  font-size:0.55rem;
+  color:#000;
+  transform: rotate(-2deg);
+}
+
+/* efecto sticker */
+.fc-daygrid-event::before{
+  content:"🎉";
+  margin-right:2px;
 }
 </style>
 </head>
@@ -119,8 +123,8 @@ body{
 
 <div class="app">
   <div class="header">
-    <h1>🎉 Cumpleaños</h1>
-    <span>Siempre a la vista</span>
+    <h1>🎂 Cumpleaños</h1>
+    <span>Calendario del equipo</span>
   </div>
 
   <div id="calendar"></div>
@@ -137,7 +141,7 @@ fetch('cumples.json')
     const events = data.map(p => {
       const d = new Date(p.fecha);
       return {
-        title: "🎂 " + p.nombre,
+        title: p.nombre,
         start: new Date(year, d.getMonth(), d.getDate()),
         allDay: true
       };
