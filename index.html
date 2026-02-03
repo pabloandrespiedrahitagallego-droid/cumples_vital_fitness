@@ -15,22 +15,30 @@
 <style>
 *{ box-sizing:border-box; }
 
-html,body{
+html, body{
   margin:0;
   padding:0;
-  height:100%;
+  min-height:100vh;
   font-family:'Inter', sans-serif;
   background: linear-gradient(180deg,#475569,#334155);
 }
 
+/* ===== CENTRADO TOTAL ===== */
+body{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
 /* ===== APP ===== */
 .app{
+  width:100%;
   max-width:1000px;
   height:100vh;
-  margin:auto;
-  padding:16px;
+  max-height:700px;
   background:linear-gradient(180deg,#fdf6e3,#f5efe0);
-  border-radius:24px;
+  border-radius:26px;
+  padding:14px;
   box-shadow:0 20px 40px rgba(0,0,0,.25);
   display:flex;
   flex-direction:column;
@@ -39,7 +47,7 @@ html,body{
 /* ===== HEADER ===== */
 .header{
   text-align:center;
-  margin-bottom:10px;
+  margin-bottom:8px;
 }
 
 .header h1{
@@ -53,21 +61,27 @@ html,body{
   color:#6b6455;
 }
 
-/* ===== CALENDAR ===== */
+/* ===== CALENDAR CONTAINER ===== */
 .calendar-card{
   flex:1;
   background:#fffaf0;
-  border-radius:20px;
-  padding:12px;
+  border-radius:18px;
+  padding:10px;
   overflow:hidden;
 }
 
-/* FullCalendar base */
+/* ===== FULLCALENDAR ===== */
 .fc{
   height:100% !important;
   color:#3f3a2f;
 }
 
+/* Quitar scroll interno */
+.fc-scroller{
+  overflow:hidden !important;
+}
+
+/* Toolbar */
 .fc-toolbar{
   margin-bottom:6px !important;
 }
@@ -76,7 +90,6 @@ html,body{
   font-size:1.2rem;
 }
 
-/* Buttons */
 .fc-button{
   background:#e6dcc6 !important;
   border:none !important;
@@ -91,7 +104,7 @@ html,body{
   color:#7a725f;
 }
 
-/* Day grid */
+/* Grid */
 .fc-daygrid-day{
   border:none !important;
 }
@@ -99,7 +112,7 @@ html,body{
 .fc-daygrid-day-frame{
   background:#fffef9;
   border-radius:12px;
-  margin:3px;
+  margin:2px;
   padding:4px;
 }
 
@@ -109,7 +122,7 @@ html,body{
   color:#6b6455;
 }
 
-/* ===== EVENT (BIRTHDAY) ===== */
+/* ===== EVENTO CUMPLEAÑOS ===== */
 .fc-event{
   background:linear-gradient(135deg,#ffe08a,#ffd24d) !important;
   border:none !important;
@@ -121,8 +134,12 @@ html,body{
   box-shadow:0 4px 10px rgba(255,208,77,.6);
 }
 
-/* Mobile tweaks */
+/* ===== MOBILE ===== */
 @media(max-width:600px){
+  .app{
+    max-height:100vh;
+    border-radius:0;
+  }
   .header h1{
     font-size:1.2rem;
   }
@@ -153,16 +170,15 @@ fetch('cumples.json')
 
   const year = new Date().getFullYear();
 
-  // ✅ FECHAS CORRECTAS (sin desfase de día)
+  // ✅ FECHAS SIN DESFASE (MEDIODÍA)
   const events = data.map(p=>{
     const d = new Date(p.fecha);
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+
     return {
       title:`🎂 ${p.nombre}`,
-      start: new Date(
-        year,
-        d.getMonth(),
-        d.getDate()
-      ),
+      start:`${year}-${mm}-${dd}T12:00:00`,
       allDay:true
     };
   });
@@ -173,8 +189,10 @@ fetch('cumples.json')
       initialView:'dayGridMonth',
       locale:'es',
       height:'100%',
-      aspectRatio:1.4,
+      contentHeight:'100%',
+      expandRows:true,
       fixedWeekCount:true,
+      aspectRatio:1.35,
       events:events
     }
   );
