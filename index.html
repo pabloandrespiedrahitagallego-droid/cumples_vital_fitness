@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.css">
 <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.js"></script>
 
-<!-- Fuente premium -->
+<!-- Fuente -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet">
 
 <style>
@@ -31,7 +31,7 @@ body{
   justify-content:center;
 }
 
-/* App container */
+/* App */
 .app{
   width:100%;
   max-width:900px;
@@ -69,27 +69,42 @@ body{
   gap:14px;
 }
 
-/* Calendar card */
-.calendar-card{
-  flex:2;
+/* Tarjetas */
+.calendar-card,
+.side-card{
   background:#020617;
   border-radius:24px;
   padding:14px;
 }
 
-/* Side card */
-.side-card{
-  flex:1;
-  background:linear-gradient(180deg,#020617,#020617);
-  border-radius:24px;
-  padding:14px;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
+/* Que el calendario ocupe TODO */
+.calendar-card{
+  flex:2;
+  display:flex;
+  flex-direction:column;
 }
 
-/* VanillaCalendar overrides */
+/* Tarjeta lateral */
+.side-card{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ================= CALENDARIO ================= */
+
+#calendar{
+  flex:1;
+}
+
+/* VanillaCalendar full height */
 .vanilla-calendar{
   height:100%;
   color:#e5e7eb;
+}
+
+.vanilla-calendar-header{
+  margin-bottom:8px;
 }
 
 .vanilla-calendar-month,
@@ -101,32 +116,62 @@ body{
   border-radius:14px !important;
 }
 
-/* 🎂 Fechas marcadas */
+/* Día cumpleaños */
 .birthday{
   background:linear-gradient(135deg,#facc15,#f59e0b) !important;
   color:#78350f !important;
   font-weight:700;
   box-shadow:0 8px 20px rgba(250,204,21,.6);
-  animation:bounce 1.4s infinite;
+  position:relative;
 }
 
 .birthday::after{
   content:"🎂";
-  display:block;
-  font-size:1.1rem;
+  position:absolute;
+  bottom:2px;
+  right:4px;
+  font-size:0.9rem;
 }
 
-/* Tarjeta lateral */
-.side-card h2{
-  margin:0 0 10px 0;
+/* ================= TARJETA DERECHA ================= */
+
+.side-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.side-header h2{
+  margin:0;
   font-size:0.9rem;
   color:#facc15;
 }
 
+.nav-btns{
+  display:flex;
+  gap:6px;
+}
+
+.nav-btns button{
+  background:#0f172a;
+  border:none;
+  color:#e5e7eb;
+  border-radius:10px;
+  padding:4px 8px;
+  cursor:pointer;
+}
+
+.nav-btns button:hover{
+  background:#1e293b;
+}
+
+/* Lista */
 .side-card ul{
   list-style:none;
   padding:0;
   margin:0;
+  flex:1;
 }
 
 .side-card li{
@@ -144,12 +189,6 @@ body{
 
 .side-card li span{
   font-size:1.2rem;
-}
-
-/* Animación */
-@keyframes bounce{
-  0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(-4px); }
 }
 
 /* Responsive */
@@ -177,79 +216,89 @@ body{
       <div id="calendar"></div>
     </div>
 
-    <div class="side-card" id="monthBirthdays"></div>
+    <div class="side-card">
+      <div class="side-header">
+        <h2 id="monthTitle"></h2>
+        <div class="nav-btns">
+          <button id="prevMonth">◀</button>
+          <button id="nextMonth">▶</button>
+        </div>
+      </div>
+      <ul id="monthBirthdays"></ul>
+    </div>
   </div>
 </div>
 
 <script>
 fetch('cumples.json')
-  .then(r => r.json())
-  .then(data => {
+.then(r => r.json())
+.then(data => {
 
-    const now = new Date();
-    const year = now.getFullYear();
-    const currentMonth = now.getMonth();
+  const monthNames = [
+    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+  ];
 
-    const birthdays = {};
-    const birthdaysThisMonth = [];
+  let currentDate = new Date();
+  const year = currentDate.getFullYear();
 
-    data.forEach(p => {
-      const d = new Date(p.fecha);
-      const key = `${year}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-      birthdays[key] = p.nombre;
+  const birthdaysByDate = {};
+  const birthdaysByMonth = {};
 
-      if(d.getMonth() === currentMonth){
-        birthdaysThisMonth.push({
-          nombre: p.nombre,
-          dia: d.getDate()
-        });
-      }
-    });
+  data.forEach(p => {
+    const d = new Date(p.fecha);
+    const dateKey = `${year}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    birthdaysByDate[dateKey] = p.nombre;
 
-    const monthNames = [
-      "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
-    ];
-
-    const side = document.getElementById("monthBirthdays");
-
-    if(birthdaysThisMonth.length){
-      side.innerHTML = `
-        <h2>🎂 ${monthNames[currentMonth]}</h2>
-        <ul>
-          ${birthdaysThisMonth
-            .sort((a,b) => a.dia - b.dia)
-            .map(p => `<li><span>🎉</span> ${p.nombre} · ${p.dia}</li>`)
-            .join("")}
-        </ul>
-      `;
-    } else {
-      side.innerHTML = `
-        <h2>🎂 ${monthNames[currentMonth]}</h2>
-        <ul>
-          <li><span>😴</span> No hay cumpleaños este mes</li>
-        </ul>
-      `;
+    if(!birthdaysByMonth[d.getMonth()]){
+      birthdaysByMonth[d.getMonth()] = [];
     }
-
-    new VanillaCalendar('#calendar', {
-      settings: {
-        lang: 'es',
-        selection: { day: false },
-        visibility: { weekend: true }
-      },
-      actions: {
-        clickDay(e, dates) {
-          const name = birthdays[dates[0]];
-          if(name){
-            alert(`🎉 Hoy es el cumpleaños de ${name}`);
-          }
-        }
-      },
-      datesFilter: date => birthdays[date] ? 'birthday' : ''
-    }).init();
-
+    birthdaysByMonth[d.getMonth()].push({
+      nombre: p.nombre,
+      dia: d.getDate()
+    });
   });
+
+  function renderSide(month){
+    const list = document.getElementById("monthBirthdays");
+    const title = document.getElementById("monthTitle");
+    title.textContent = `🎂 ${monthNames[month]}`;
+
+    const items = birthdaysByMonth[month] || [];
+    list.innerHTML = items.length
+      ? items
+          .sort((a,b)=>a.dia-b.dia)
+          .map(p => `<li><span>🎉</span>${p.nombre} · ${p.dia}</li>`)
+          .join("")
+      : `<li><span>😴</span>No hay cumpleaños este mes</li>`;
+  }
+
+  const calendar = new VanillaCalendar('#calendar', {
+    settings:{
+      lang:'es',
+      selection:{ day:false }
+    },
+    actions:{
+      changeMonth(_, month){
+        currentDate.setMonth(month);
+        renderSide(month);
+      }
+    },
+    datesFilter:(date)=> birthdaysByDate[date] ? 'birthday' : ''
+  });
+
+  calendar.init();
+  renderSide(currentDate.getMonth());
+
+  document.getElementById("prevMonth").onclick = () => {
+    calendar.prevMonth();
+  };
+
+  document.getElementById("nextMonth").onclick = () => {
+    calendar.nextMonth();
+  };
+
+});
 </script>
 
 </body>
