@@ -20,9 +20,13 @@
   font-family:'Poppins',sans-serif;
 }
 
-body{
+html, body{
   margin:0;
-  min-height:100vh;
+  padding:0;
+  height:auto;          /* 🔑 */
+}
+
+body{
   background:linear-gradient(180deg,#f6f5ff,#e9e7ff);
   padding:8px;
 }
@@ -32,14 +36,14 @@ body{
   max-width:1100px;
   margin:auto;
   background:var(--card);
-  border-radius:24px;
-  padding:14px;
-  box-shadow:0 24px 48px rgba(80,80,150,.18);
+  border-radius:22px;
+  padding:12px;
+  box-shadow:0 20px 40px rgba(80,80,150,.16);
 }
 
 h1{
-  margin:0 0 8px;
-  font-size:1.4rem;
+  margin:0 0 6px;
+  font-size:1.25rem;
   color:var(--title);
 }
 
@@ -50,44 +54,43 @@ h1{
 
 .fc-view-harness{
   overflow:hidden;
-  max-height:65vh;           /* 🔒 evita scroll */
 }
 
-/* GRID REDONDEADO */
+/* GRID REDONDEADO (MES) */
 .fc-scrollgrid,
 .fc-scrollgrid table{
-  border-collapse:separate !important;
-  border-spacing:3px !important;
+  border-collapse:separate!important;
+  border-spacing:3px!important;
 }
 
 .fc-scrollgrid td,
 .fc-scrollgrid th{
-  border-radius:14px;
+  border-radius:12px;
   border:1px solid var(--grid)!important;
   background:#fafaff;
 }
 
-/* CELDAS */
+/* CELDAS MES */
 .fc-daygrid-day,
 .fc-daygrid-day-frame{
-  min-height:78px!important;
-  max-height:78px!important;
+  min-height:72px!important;
+  max-height:72px!important;
   padding:3px;
   overflow:visible!important;
 }
 
 .fc-daygrid-day-number{
-  font-size:.65rem;
+  font-size:.6rem;
   color:#6b7280;
 }
 
 /* TOOLBAR */
 .fc-toolbar{
-  margin-bottom:6px!important;
+  margin-bottom:4px!important;
 }
 
 .fc-toolbar-title{
-  font-size:1.05rem;
+  font-size:1rem;
   font-weight:700;
 }
 
@@ -95,8 +98,8 @@ h1{
   background:#ede9fe!important;
   border:none!important;
   border-radius:999px!important;
-  padding:3px 10px!important;
-  font-size:.65rem!important;
+  padding:3px 8px!important;
+  font-size:.6rem!important;
   font-weight:600;
   color:#5b21b6!important;
 }
@@ -111,74 +114,44 @@ h1{
 /* ===== NUBES ===== */
 .cloud{
   margin-top:2px;
-  padding:4px 7px;
+  padding:3px 6px;
   border-radius:999px;
-  font-size:.6rem;
+  font-size:.55rem;
   font-weight:700;
   color:#3f3f46;
-  box-shadow:0 8px 14px rgba(0,0,0,.18);
+  box-shadow:0 6px 12px rgba(0,0,0,.16);
   position:relative;
-
-  animation:
-    floatY 4s ease-in-out infinite,
-    floatX 5s ease-in-out infinite,
-    sway 4.5s ease-in-out infinite;
 }
 
-.cloud::before,
-.cloud::after{
-  content:"";
-  position:absolute;
-  background:inherit;
-  border-radius:50%;
-}
-
-.cloud::before{
-  width:14px;
-  height:14px;
-  top:-7px;
-  left:12px;
-}
-
-.cloud::after{
-  width:20px;
-  height:20px;
-  top:-10px;
-  right:14px;
-}
-
-/* Animaciones */
-@keyframes floatY{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-5px)}
-}
-@keyframes floatX{
-  0%,100%{transform:translateX(0)}
-  50%{transform:translateX(5px)}
-}
-@keyframes sway{
-  0%,100%{rotate:0deg}
-  50%{rotate:.7deg}
-}
-
-/* COLORES CREAMY */
+/* Colores */
 .c1{background:#c7d2fe}
 .c2{background:#fecdd3}
 .c3{background:#bbf7d0}
 .c4{background:#fde68a}
 .c5{background:#ddd6fe}
 
-/* ===== MOBILE ===== */
+/* ===== MOBILE (VISTA SEMANA) ===== */
 @media(max-width:768px){
 
-  .fc-view-harness{
-    max-height:55vh;
+  .wrapper{
+    padding:10px;
   }
 
-  .fc-daygrid-day,
-  .fc-daygrid-day-frame{
-    min-height:64px!important;
-    max-height:64px!important;
+  /* Semana sin horas */
+  .fc-timegrid-slot{
+    display:none!important;
+  }
+
+  .fc-timegrid-axis{
+    display:none!important;
+  }
+
+  .fc-timegrid-event{
+    margin:2px;
+  }
+
+  .fc-timegrid-day-frame{
+    padding:4px;
   }
 
   .cloud{
@@ -212,8 +185,7 @@ const cumpleanios=[
   {nombre:"Carolina",fecha:"09-01"},
   {nombre:"Erika",fecha:"09-07"},
   {nombre:"Dumar",fecha:"10-30"},
-  {nombre:"Karol",fecha:"11-15"},
-  {nombre:"Coste",fecha:"10-06"}
+  {nombre:"Karol",fecha:"11-15"}
 ];
 
 const colors=["c1","c2","c3","c4","c5"];
@@ -228,15 +200,17 @@ function buildEvents(year){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-  const calendar=new FullCalendar.Calendar(
+  const isMobile = window.innerWidth < 768;
+
+  const calendar = new FullCalendar.Calendar(
     document.getElementById("calendar"),
     {
       locale:"es",
-      initialView:"dayGridMonth",
-      fixedWeekCount:true,
-      showNonCurrentDates:false,
+      initialView: isMobile ? "timeGridWeek" : "dayGridMonth",
+      fixedWeekCount: !isMobile,
+      showNonCurrentDates: !isMobile,
       height:"auto",
-      events:buildEvents(new Date().getFullYear()),
+      events: buildEvents(new Date().getFullYear()),
       headerToolbar:{
         left:"prev,today,next",
         center:"title",
@@ -254,6 +228,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       }
     }
   );
+
   calendar.render();
 });
 </script>
