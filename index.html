@@ -2,69 +2,119 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<title>🎂 Calendario de Cumpleaños</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🎂 Cumpleaños</title>
 
-<!-- FullCalendar CSS -->
+<!-- FullCalendar -->
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
 
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&display=swap" rel="stylesheet">
+
 <style>
+  * { box-sizing: border-box; }
+
   body {
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    background: #f4f6f9;
     margin: 0;
-    padding: 0;
+    height: 100vh;
+    font-family: 'Baloo 2', cursive;
+    background:
+      radial-gradient(circle at 10% 20%, #ffeaa7 2px, transparent 2px),
+      radial-gradient(circle at 80% 30%, #fab1a0 2px, transparent 2px),
+      radial-gradient(circle at 50% 70%, #74b9ff 2px, transparent 2px),
+      #f1f2f6;
+    background-size: 40px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    max-height: 640px;
+    background: #fff;
+    border-radius: 25px;
+    padding: 12px;
+    box-shadow: 0 15px 30px rgba(0,0,0,.15);
+    display: flex;
+    flex-direction: column;
   }
 
   header {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    padding: 20px;
     text-align: center;
+    padding: 6px 0;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+  }
+
+  header p {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.7;
   }
 
   #calendar {
-    max-width: 1100px;
-    margin: 30px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,.1);
+    flex: 1;
+  }
+
+  /* FullCalendar compact */
+  .fc {
+    font-size: 0.72rem;
+  }
+
+  .fc-toolbar-title {
+    font-size: 1rem !important;
+  }
+
+  .fc-button {
+    border-radius: 12px !important;
+    padding: 2px 6px !important;
+  }
+
+  .fc-daygrid-day-number {
+    font-size: 0.7rem;
+  }
+
+  .fc-event {
+    border-radius: 10px;
+    padding: 1px 3px;
+    font-size: 0.6rem;
   }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>🎉 Cumpleaños del Equipo</h1>
-  <p>Fechas importantes siempre a la vista</p>
-</header>
+<div class="card">
+  <header>
+    <h1>🎉 Cumpleaños</h1>
+    <p>¡Nunca olvides uno!</p>
+  </header>
 
-<div id="calendar"></div>
+  <div id="calendar"></div>
+</div>
 
-<!-- FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
 <script>
 fetch('cumples.json')
-  .then(res => res.json())
+  .then(r => r.json())
   .then(data => {
 
     const year = new Date().getFullYear();
 
-    const eventos = data.map(p => {
-      const fechaOriginal = new Date(p.fecha);
-      const fechaActual = new Date(
-        year,
-        fechaOriginal.getMonth(),
-        fechaOriginal.getDate()
-      );
-
+    const events = data.map(p => {
+      const d = new Date(p.fecha);
       return {
         title: "🎂 " + p.nombre,
-        start: fechaActual.toISOString().split('T')[0],
+        start: new Date(year, d.getMonth(), d.getDate()),
         allDay: true,
-        color: "#f6c23e"
+        color: "#ff7675"
       };
     });
 
@@ -73,21 +123,19 @@ fetch('cumples.json')
       {
         initialView: 'dayGridMonth',
         locale: 'es',
+        height: '100%',
         headerToolbar: {
-          left: 'prev,next today',
+          left: 'prev',
           center: 'title',
-          right: ''
+          right: 'next'
         },
-        events: eventos,
-        eventClick: function(info) {
-          alert("🎉 Cumpleaños de " + info.event.title.replace("🎂 ", ""));
-        }
+        fixedWeekCount: false,
+        events: events
       }
     );
 
     calendar.render();
   });
-
 </script>
 
 </body>
