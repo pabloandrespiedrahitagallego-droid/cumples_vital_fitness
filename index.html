@@ -2,10 +2,6 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-
-<!-- 🔥 CLAVE PARA MÓVIL -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Cumpleaños</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css">
@@ -24,31 +20,26 @@
   font-family:'Poppins',sans-serif;
 }
 
-/* 🔥 RESET REAL */
-html, body{
-  margin:0;
-  padding:0;
-  height:auto;
-}
-
 body{
+  margin:0;
+  min-height:100vh;
   background:linear-gradient(180deg,#f6f5ff,#e9e7ff);
-  display:block;          /* ❌ NO flex */
+  padding:8px;
 }
 
 /* CONTENEDOR */
 .wrapper{
   max-width:1100px;
-  margin:8px auto 0 auto; /* 👈 NO centra vertical */
+  margin:auto;
   background:var(--card);
-  border-radius:20px;
-  padding:10px;
-  box-shadow:0 16px 32px rgba(80,80,150,.14);
+  border-radius:24px;
+  padding:14px;
+  box-shadow:0 24px 48px rgba(80,80,150,.18);
 }
 
 h1{
-  margin:0 0 6px;
-  font-size:1.2rem;
+  margin:0 0 8px;
+  font-size:1.4rem;
   color:var(--title);
 }
 
@@ -59,18 +50,19 @@ h1{
 
 .fc-view-harness{
   overflow:hidden;
+  max-height:65vh;           /* 🔒 evita scroll */
 }
 
-/* GRID MES */
+/* GRID REDONDEADO */
 .fc-scrollgrid,
 .fc-scrollgrid table{
-  border-collapse:separate!important;
-  border-spacing:3px!important;
+  border-collapse:separate !important;
+  border-spacing:3px !important;
 }
 
 .fc-scrollgrid td,
 .fc-scrollgrid th{
-  border-radius:10px;
+  border-radius:14px;
   border:1px solid var(--grid)!important;
   background:#fafaff;
 }
@@ -78,22 +70,24 @@ h1{
 /* CELDAS */
 .fc-daygrid-day,
 .fc-daygrid-day-frame{
-  min-height:70px!important;
-  max-height:70px!important;
+  min-height:78px!important;
+  max-height:78px!important;
   padding:3px;
   overflow:visible!important;
 }
 
 .fc-daygrid-day-number{
-  font-size:.6rem;
+  font-size:.65rem;
   color:#6b7280;
 }
 
 /* TOOLBAR */
-.fc-toolbar{ margin-bottom:4px!important; }
+.fc-toolbar{
+  margin-bottom:6px!important;
+}
 
 .fc-toolbar-title{
-  font-size:.95rem;
+  font-size:1.05rem;
   font-weight:700;
 }
 
@@ -101,8 +95,8 @@ h1{
   background:#ede9fe!important;
   border:none!important;
   border-radius:999px!important;
-  padding:3px 8px!important;
-  font-size:.6rem!important;
+  padding:3px 10px!important;
+  font-size:.65rem!important;
   font-weight:600;
   color:#5b21b6!important;
 }
@@ -114,32 +108,83 @@ h1{
   padding:0!important;
 }
 
-/* NUBES */
+/* ===== NUBES ===== */
 .cloud{
   margin-top:2px;
-  padding:3px 6px;
+  padding:4px 7px;
   border-radius:999px;
-  font-size:.55rem;
+  font-size:.6rem;
   font-weight:700;
   color:#3f3f46;
-  box-shadow:0 6px 12px rgba(0,0,0,.16);
+  box-shadow:0 8px 14px rgba(0,0,0,.18);
+  position:relative;
+
+  animation:
+    floatY 4s ease-in-out infinite,
+    floatX 5s ease-in-out infinite,
+    sway 4.5s ease-in-out infinite;
 }
 
-/* COLORES */
+.cloud::before,
+.cloud::after{
+  content:"";
+  position:absolute;
+  background:inherit;
+  border-radius:50%;
+}
+
+.cloud::before{
+  width:14px;
+  height:14px;
+  top:-7px;
+  left:12px;
+}
+
+.cloud::after{
+  width:20px;
+  height:20px;
+  top:-10px;
+  right:14px;
+}
+
+/* Animaciones */
+@keyframes floatY{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+@keyframes floatX{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(5px)}
+}
+@keyframes sway{
+  0%,100%{rotate:0deg}
+  50%{rotate:.7deg}
+}
+
+/* COLORES CREAMY */
 .c1{background:#c7d2fe}
 .c2{background:#fecdd3}
 .c3{background:#bbf7d0}
 .c4{background:#fde68a}
 .c5{background:#ddd6fe}
 
-/* ===== MÓVIL: SEMANA ===== */
-.fc-timegrid-slot,
-.fc-timegrid-axis{
-  display:none!important;
-}
+/* ===== MOBILE ===== */
+@media(max-width:768px){
 
-.fc-timegrid-day-frame{
-  padding:4px;
+  .fc-view-harness{
+    max-height:55vh;
+  }
+
+  .fc-daygrid-day,
+  .fc-daygrid-day-frame{
+    min-height:64px!important;
+    max-height:64px!important;
+  }
+
+  .cloud{
+    font-size:.55rem;
+    padding:3px 6px;
+  }
 }
 </style>
 </head>
@@ -182,44 +227,33 @@ function buildEvents(year){
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-
-  const calendarEl=document.getElementById("calendar");
-
-  const calendar=new FullCalendar.Calendar(calendarEl,{
-    locale:"es",
-    initialView:"dayGridMonth",
-    fixedWeekCount:true,
-    showNonCurrentDates:false,
-    height:"auto",
-    events:buildEvents(new Date().getFullYear()),
-    headerToolbar:{
-      left:"prev,today,next",
-      center:"title",
-      right:""
-    },
-    datesSet(info){
-      calendar.removeAllEvents();
-      calendar.addEventSource(buildEvents(info.start.getFullYear()));
-    },
-    eventContent(arg){
-      const color=arg.event.classNames[0];
-      return{
-        html:`<div class="cloud ${color}">🎂 ${arg.event.extendedProps.nombre}</div>`
-      };
+  const calendar=new FullCalendar.Calendar(
+    document.getElementById("calendar"),
+    {
+      locale:"es",
+      initialView:"dayGridMonth",
+      fixedWeekCount:true,
+      showNonCurrentDates:false,
+      height:"auto",
+      events:buildEvents(new Date().getFullYear()),
+      headerToolbar:{
+        left:"prev,today,next",
+        center:"title",
+        right:""
+      },
+      datesSet(info){
+        calendar.removeAllEvents();
+        calendar.addEventSource(buildEvents(info.start.getFullYear()));
+      },
+      eventContent(arg){
+        const color=arg.event.classNames[0];
+        return{
+          html:`<div class="cloud ${color}">🎂 ${arg.event.extendedProps.nombre}</div>`
+        };
+      }
     }
-  });
-
+  );
   calendar.render();
-
-  /* 🔥 FORZAR SEMANA EN MÓVIL */
-  const mq=window.matchMedia("(max-width:768px)");
-
-  function handleView(e){
-    calendar.changeView(e.matches ? "timeGridWeek" : "dayGridMonth");
-  }
-
-  mq.addEventListener("change",handleView);
-  handleView(mq);
 });
 </script>
 
