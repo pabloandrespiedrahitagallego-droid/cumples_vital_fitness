@@ -165,41 +165,55 @@ body{
 
 <script>
 fetch('cumples.json')
-.then(r=>r.json())
-.then(data=>{
+.then(r => r.json())
+.then(data => {
 
-  const year = new Date().getFullYear();
+  let calendar;
 
-  // ✅ FECHAS SIN DESFASE (MEDIODÍA)
-  const events = data.map(p=>{
-    const d = new Date(p.fecha);
-    const mm = String(d.getMonth()+1).padStart(2,'0');
-    const dd = String(d.getDate()).padStart(2,'0');
+  function buildEvents(forYear){
+    return data.map(p => {
+      const d = new Date(p.fecha);
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
 
-    return {
-      title:`🎂 ${p.nombre}`,
-      start:`${year}-${mm}-${dd}T12:00:00`,
-      allDay:true
-    };
-  });
+      return {
+        title: `🎂 ${p.nombre}`,
+        start: `${forYear}-${mm}-${dd}T12:00:00`, // MEDIODÍA = sin desfase
+        allDay: true
+      };
+    });
+  }
 
-  const calendar = new FullCalendar.Calendar(
+  calendar = new FullCalendar.Calendar(
     document.getElementById('calendar'),
     {
-      initialView:'dayGridMonth',
-      locale:'es',
-      height:'100%',
-      contentHeight:'100%',
-      expandRows:true,
-      fixedWeekCount:true,
-      aspectRatio:1.35,
-      events:events
+      initialView: 'dayGridMonth',
+      locale: 'es',
+      height: '100%',
+      contentHeight: '100%',
+      expandRows: true,
+      fixedWeekCount: true,
+      aspectRatio: 1.35,
+
+      // 🔁 Se ejecuta al cambiar mes o año
+      datesSet: function(info){
+        const visibleYear = info.start.getFullYear();
+        calendar.removeAllEvents();
+        calendar.addEventSource(buildEvents(visibleYear));
+      }
     }
   );
 
   calendar.render();
+
+  // Cargar eventos del año inicial
+  const initialYear = calendar.getDate().getFullYear();
+  calendar.addEventSource(buildEvents(initialYear));
+
 });
 </script>
 
+
 </body>
 </html>
+
