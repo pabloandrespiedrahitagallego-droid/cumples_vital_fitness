@@ -1,40 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Calendario de Cumpleaños</title>
+<meta charset="UTF-8" />
+<title>🎂 Calendario de Cumpleaños</title>
+
+<!-- FullCalendar CSS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+
 <style>
-  body { font-family: Arial; }
-  .day { display:inline-block; width:40px; height:40px; margin:3px; text-align:center; line-height:40px; }
-  .birthday { background:#ffd700; border-radius:50%; }
+  body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 0;
+  }
+
+  header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+
+  #calendar {
+    max-width: 1100px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.1);
+  }
 </style>
 </head>
+
 <body>
 
-<h2>🎂 Cumpleaños del mes</h2>
+<header>
+  <h1>🎉 Cumpleaños del Equipo</h1>
+  <p>Fechas importantes siempre a la vista</p>
+</header>
+
 <div id="calendar"></div>
+
+<!-- FullCalendar JS -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
 <script>
 fetch('cumples.json')
-.then(r => r.json())
-.then(data => {
-  const cal = document.getElementById("calendar");
-  for(let d=1; d<=31; d++){
-    const div = document.createElement("div");
-    div.className = "day";
-    div.textContent = d;
+  .then(res => res.json())
+  .then(data => {
 
-    data.forEach(p => {
-      const fecha = new Date(p.fecha);
-      if(fecha.getDate() === d){
-        div.classList.add("birthday");
-        div.title = p.nombre;
-      }
+    const year = new Date().getFullYear();
+
+    const eventos = data.map(p => {
+      const fechaOriginal = new Date(p.fecha);
+      const fechaActual = new Date(
+        year,
+        fechaOriginal.getMonth(),
+        fechaOriginal.getDate()
+      );
+
+      return {
+        title: "🎂 " + p.nombre,
+        start: fechaActual.toISOString().split('T')[0],
+        allDay: true,
+        color: "#f6c23e"
+      };
     });
 
-    cal.appendChild(div);
-  }
-});
+    const calendar = new FullCalendar.Calendar(
+      document.getElementById('calendar'),
+      {
+        initialView: 'dayGridMonth',
+        locale: 'es',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: ''
+        },
+        events: eventos,
+        eventClick: function(info) {
+          alert("🎉 Cumpleaños de " + info.event.title.replace("🎂 ", ""));
+        }
+      }
+    );
+
+    calendar.render();
+  });
+
 </script>
 
 </body>
