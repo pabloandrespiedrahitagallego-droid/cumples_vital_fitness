@@ -2,6 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+
+<!-- 🔥 CLAVE PARA MÓVIL -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Cumpleaños</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css">
@@ -15,8 +19,12 @@
   --grid:#e9e7ff;
 }
 
-*{ box-sizing:border-box; font-family:'Poppins',sans-serif; }
+*{
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
 
+/* 🔥 RESET REAL */
 html, body{
   margin:0;
   padding:0;
@@ -25,13 +33,13 @@ html, body{
 
 body{
   background:linear-gradient(180deg,#f6f5ff,#e9e7ff);
-  padding:8px;
+  display:block;          /* ❌ NO flex */
 }
 
 /* CONTENEDOR */
 .wrapper{
   max-width:1100px;
-  margin:auto;
+  margin:8px auto 0 auto; /* 👈 NO centra vertical */
   background:var(--card);
   border-radius:20px;
   padding:10px;
@@ -44,8 +52,10 @@ h1{
   color:var(--title);
 }
 
-/* CALENDARIO */
-.fc{ background:transparent; }
+/* ===== CALENDARIO ===== */
+.fc{
+  background:transparent;
+}
 
 .fc-view-harness{
   overflow:hidden;
@@ -65,7 +75,7 @@ h1{
   background:#fafaff;
 }
 
-/* CELDAS MES */
+/* CELDAS */
 .fc-daygrid-day,
 .fc-daygrid-day-frame{
   min-height:70px!important;
@@ -122,7 +132,7 @@ h1{
 .c4{background:#fde68a}
 .c5{background:#ddd6fe}
 
-/* ===== SEMANA (MÓVIL) ===== */
+/* ===== MÓVIL: SEMANA ===== */
 .fc-timegrid-slot,
 .fc-timegrid-axis{
   display:none!important;
@@ -173,9 +183,9 @@ function buildEvents(year){
 
 document.addEventListener("DOMContentLoaded",()=>{
 
-  const calendarEl = document.getElementById("calendar");
+  const calendarEl=document.getElementById("calendar");
 
-  const calendar = new FullCalendar.Calendar(calendarEl,{
+  const calendar=new FullCalendar.Calendar(calendarEl,{
     locale:"es",
     initialView:"dayGridMonth",
     fixedWeekCount:true,
@@ -201,15 +211,11 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   calendar.render();
 
-  /* 🔥 FORZAR SEMANA EN MÓVIL (CLAVE) */
-  const mq = window.matchMedia("(max-width: 768px)");
+  /* 🔥 FORZAR SEMANA EN MÓVIL */
+  const mq=window.matchMedia("(max-width:768px)");
 
   function handleView(e){
-    if(e.matches){
-      calendar.changeView("timeGridWeek");
-    }else{
-      calendar.changeView("dayGridMonth");
-    }
+    calendar.changeView(e.matches ? "timeGridWeek" : "dayGridMonth");
   }
 
   mq.addEventListener("change",handleView);
