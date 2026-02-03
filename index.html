@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🎉 Cumpleaños</title>
 
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+<!-- VanillaCalendar Pro -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.css">
+<script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.js"></script>
+
+<!-- Fuente premium -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet">
 
 <style>
@@ -19,9 +23,9 @@ html, body{
   font-family:'Inter', sans-serif;
 }
 
-/* Fondo premium */
+/* Fondo premium WOW */
 body{
-  background: linear-gradient(160deg, #0f172a, #1e293b);
+  background: radial-gradient(circle at top, #1e293b, #020617);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -30,99 +34,75 @@ body{
 /* App container */
 .app{
   width:100%;
-  max-width:390px;
+  max-width:400px;
   height:100%;
   max-height:620px;
-  background:linear-gradient(180deg,#ffffff,#f8fafc);
-  border-radius:28px;
-  padding:12px;
-  box-shadow:0 30px 60px rgba(0,0,0,.35);
+  background:linear-gradient(180deg,#0f172a,#020617);
+  border-radius:30px;
+  padding:16px;
+  box-shadow:0 40px 80px rgba(0,0,0,.6);
   display:flex;
   flex-direction:column;
 }
 
 /* Header */
 .header{
-  background:linear-gradient(135deg,#6366f1,#4f46e5);
-  color:#fff;
-  border-radius:22px;
-  padding:14px;
-  margin-bottom:10px;
+  text-align:center;
+  margin-bottom:12px;
 }
 
 .header h1{
   margin:0;
-  font-size:1.1rem;
+  font-size:1.2rem;
+  color:#f8fafc;
 }
 
 .header span{
   font-size:0.7rem;
-  opacity:.85;
+  color:#94a3b8;
 }
 
 /* Calendar */
 #calendar{
   flex:1;
+  background:#020617;
+  border-radius:24px;
+  padding:12px;
 }
 
-/* FullCalendar base */
-.fc{
-  font-size:0.72rem;
+/* VanillaCalendar overrides */
+.vanilla-calendar{
+  height:100%;
+  color:#e5e7eb;
 }
 
-.fc-toolbar{
-  margin:6px 0 !important;
-}
-
-.fc-toolbar-title{
-  font-size:1rem !important;
+.vanilla-calendar-month,
+.vanilla-calendar-year{
   font-weight:600;
 }
 
-.fc-button{
-  background:#e0e7ff !important;
-  color:#1e293b !important;
-  border:none !important;
-  border-radius:12px !important;
-  padding:4px 10px !important;
+.vanilla-calendar-day__btn{
+  border-radius:14px !important;
 }
 
-.fc-theme-standard td,
-.fc-theme-standard th{
-  border:none;
+/* 🎂 CUMPLEAÑOS WOW */
+.birthday{
+  background:linear-gradient(135deg,#facc15,#f59e0b) !important;
+  color:#78350f !important;
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(250,204,21,.6);
+  animation:bounce 1.5s infinite;
 }
 
-/* Celdas más altas */
-.fc-daygrid-day{
-  min-height:85px;
-}
-
-/* Número del día */
-.fc-daygrid-day-number{
-  font-size:0.7rem;
-  color:#475569;
-  font-weight:600;
-}
-
-/* 🎂 EVENTO PREMIUM */
-.fc-daygrid-event{
-  background:linear-gradient(135deg,#fde68a,#facc15) !important;
-  border:none !important;
-  border-radius:18px;
-  padding:8px 10px;
-  margin-top:6px;
-  font-size:0.7rem;
-  font-weight:600;
-  color:#78350f;
-  box-shadow:0 10px 20px rgba(0,0,0,.25);
-  transform: rotate(-2deg);
-}
-
-/* Emoji grande */
-.fc-daygrid-event::before{
+.birthday::after{
   content:"🎂";
-  font-size:1.2rem;
-  margin-right:6px;
+  display:block;
+  font-size:1.1rem;
+}
+
+@keyframes bounce{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-4px); }
 }
 </style>
 </head>
@@ -138,40 +118,38 @@ body{
   <div id="calendar"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <script>
 fetch('cumples.json')
   .then(r => r.json())
   .then(data => {
 
     const year = new Date().getFullYear();
+    const birthdays = {};
 
-    const events = data.map(p => {
+    data.forEach(p => {
       const d = new Date(p.fecha);
-      return {
-        title: p.nombre,
-        start: new Date(year, d.getMonth(), d.getDate()),
-        allDay: true
-      };
+      const key = `${year}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      birthdays[key] = p.nombre;
     });
 
-    const calendar = new FullCalendar.Calendar(
-      document.getElementById('calendar'),
-      {
-        initialView:'dayGridMonth',
-        locale:'es',
-        height:'100%',
-        fixedWeekCount:false,
-        headerToolbar:{
-          left:'prev',
-          center:'title',
-          right:'next'
-        },
-        events:events
+    new VanillaCalendar('#calendar', {
+      settings: {
+        lang: 'es',
+        selection: { day: false },
+        visibility: { weekend: true }
+      },
+      actions: {
+        clickDay(e, dates) {
+          const name = birthdays[dates[0]];
+          if(name){
+            alert(`🎉 Hoy es el cumpleaños de ${name}`);
+          }
+        }
+      },
+      datesFilter: (date) => {
+        return birthdays[date] ? 'birthday' : '';
       }
-    );
-
-    calendar.render();
+    }).init();
   });
 </script>
 
