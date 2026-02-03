@@ -2,149 +2,188 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎉 Cumpleaños</title>
+<title>Cumpleaños</title>
 
-<!-- FullCalendar -->
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
-
-<!-- Fuente -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{ box-sizing:border-box; }
-
-html, body{
-  margin:0;
-  padding:0;
-  min-height:100vh;
-  font-family:'Inter', sans-serif;
-  background: linear-gradient(180deg,#475569,#334155);
+:root{
+  --bg:#f6f5ff;
+  --card:#ffffff;
+  --title:#2c2c3a;
+  --grid:#e9e7ff;
 }
 
-/* ===== CENTRADO TOTAL ===== */
+*{
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
 body{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* ===== APP ===== */
-.app{
-  width:100%;
-  max-width:1000px;
-  height:100vh;
-  max-height:700px;
-  background:linear-gradient(180deg,#fdf6e3,#f5efe0);
-  border-radius:26px;
-  padding:14px;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
-  display:flex;
-  flex-direction:column;
-}
-
-/* ===== HEADER ===== */
-.header{
-  text-align:center;
-  margin-bottom:8px;
-}
-
-.header h1{
   margin:0;
+  min-height:100vh;
+  background:linear-gradient(180deg,#f6f5ff,#e9e7ff);
+  padding:8px;
+}
+
+/* CONTENEDOR */
+.wrapper{
+  max-width:1100px;
+  margin:auto;
+  background:var(--card);
+  border-radius:24px;
+  padding:14px;
+  box-shadow:0 24px 48px rgba(80,80,150,.18);
+}
+
+h1{
+  margin:0 0 8px;
   font-size:1.4rem;
-  color:#3f3a2f;
+  color:var(--title);
 }
 
-.header span{
-  font-size:.8rem;
-  color:#6b6455;
-}
-
-/* ===== CALENDAR CONTAINER ===== */
-.calendar-card{
-  flex:1;
-  background:#fffaf0;
-  border-radius:18px;
-  padding:10px;
-  overflow:hidden;
-}
-
-/* ===== FULLCALENDAR ===== */
+/* ===== CALENDARIO ===== */
 .fc{
-  height:100% !important;
-  color:#3f3a2f;
+  background:transparent;
 }
 
-/* Quitar scroll interno */
-.fc-scroller{
-  overflow:hidden !important;
+.fc-view-harness{
+  overflow:hidden;
+  max-height:65vh;           /* 🔒 evita scroll */
 }
 
-/* Toolbar */
-.fc-toolbar{
-  margin-bottom:6px !important;
+/* GRID REDONDEADO */
+.fc-scrollgrid,
+.fc-scrollgrid table{
+  border-collapse:separate !important;
+  border-spacing:3px !important;
 }
 
-.fc-toolbar-title{
-  font-size:1.2rem;
+.fc-scrollgrid td,
+.fc-scrollgrid th{
+  border-radius:14px;
+  border:1px solid var(--grid)!important;
+  background:#fafaff;
 }
 
-.fc-button{
-  background:#e6dcc6 !important;
-  border:none !important;
-  border-radius:10px !important;
-  color:#3f3a2f !important;
-  padding:4px 8px !important;
-}
-
-/* Weekdays */
-.fc-col-header-cell{
-  font-size:.7rem;
-  color:#7a725f;
-}
-
-/* Grid */
-.fc-daygrid-day{
-  border:none !important;
-}
-
+/* CELDAS */
+.fc-daygrid-day,
 .fc-daygrid-day-frame{
-  background:#fffef9;
-  border-radius:12px;
-  margin:2px;
-  padding:4px;
+  min-height:78px!important;
+  max-height:78px!important;
+  padding:3px;
+  overflow:visible!important;
 }
 
 .fc-daygrid-day-number{
-  font-size:.7rem;
-  font-weight:600;
-  color:#6b6455;
+  font-size:.65rem;
+  color:#6b7280;
 }
 
-/* ===== EVENTO CUMPLEAÑOS ===== */
-.fc-event{
-  background:linear-gradient(135deg,#ffe08a,#ffd24d) !important;
-  border:none !important;
-  border-radius:14px;
-  padding:3px 6px;
-  font-size:.65rem;
-  font-weight:700;
-  color:#6b4e00;
-  box-shadow:0 4px 10px rgba(255,208,77,.6);
+/* TOOLBAR */
+.fc-toolbar{
+  margin-bottom:6px!important;
 }
+
+.fc-toolbar-title{
+  font-size:1.05rem;
+  font-weight:700;
+}
+
+.fc-button{
+  background:#ede9fe!important;
+  border:none!important;
+  border-radius:999px!important;
+  padding:3px 10px!important;
+  font-size:.65rem!important;
+  font-weight:600;
+  color:#5b21b6!important;
+}
+
+/* EVENTOS */
+.fc-event{
+  background:transparent!important;
+  border:none!important;
+  padding:0!important;
+}
+
+/* ===== NUBES ===== */
+.cloud{
+  margin-top:2px;
+  padding:4px 7px;
+  border-radius:999px;
+  font-size:.6rem;
+  font-weight:700;
+  color:#3f3f46;
+  box-shadow:0 8px 14px rgba(0,0,0,.18);
+  position:relative;
+
+  animation:
+    floatY 4s ease-in-out infinite,
+    floatX 5s ease-in-out infinite,
+    sway 4.5s ease-in-out infinite;
+}
+
+.cloud::before,
+.cloud::after{
+  content:"";
+  position:absolute;
+  background:inherit;
+  border-radius:50%;
+}
+
+.cloud::before{
+  width:14px;
+  height:14px;
+  top:-7px;
+  left:12px;
+}
+
+.cloud::after{
+  width:20px;
+  height:20px;
+  top:-10px;
+  right:14px;
+}
+
+/* Animaciones */
+@keyframes floatY{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+@keyframes floatX{
+  0%,100%{transform:translateX(0)}
+  50%{transform:translateX(5px)}
+}
+@keyframes sway{
+  0%,100%{rotate:0deg}
+  50%{rotate:.7deg}
+}
+
+/* COLORES CREAMY */
+.c1{background:#c7d2fe}
+.c2{background:#fecdd3}
+.c3{background:#bbf7d0}
+.c4{background:#fde68a}
+.c5{background:#ddd6fe}
 
 /* ===== MOBILE ===== */
-@media(max-width:600px){
-  .app{
-    max-height:100vh;
-    border-radius:0;
+@media(max-width:768px){
+
+  .fc-view-harness{
+    max-height:55vh;
   }
-  .header h1{
-    font-size:1.2rem;
+
+  .fc-daygrid-day,
+  .fc-daygrid-day-frame{
+    min-height:64px!important;
+    max-height:64px!important;
   }
-  .fc-toolbar-title{
-    font-size:1rem;
+
+  .cloud{
+    font-size:.55rem;
+    padding:3px 6px;
   }
 }
 </style>
@@ -152,68 +191,72 @@ body{
 
 <body>
 
-<div class="app">
-  <div class="header">
-    <h1>🎉 Cumpleaños</h1>
-    <span>Fechas importantes del grupo</span>
-  </div>
-
-  <div class="calendar-card">
-    <div id="calendar"></div>
-  </div>
+<div class="wrapper">
+  <h1>🎂 Cumpleaños</h1>
+  <div id="calendar"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
 <script>
-fetch('cumples.json')
-.then(r => r.json())
-.then(data => {
+const cumpleanios=[
+  {nombre:"Pablo",fecha:"02-06"},
+  {nombre:"Susana",fecha:"02-15"},
+  {nombre:"Melissa",fecha:"03-25"},
+  {nombre:"Samuel",fecha:"04-03"},
+  {nombre:"Estefania",fecha:"05-29"},
+  {nombre:"Manuela",fecha:"06-03"},
+  {nombre:"Julián",fecha:"06-06"},
+  {nombre:"Laura",fecha:"06-14"},
+  {nombre:"Angie",fecha:"08-02"},
+  {nombre:"Carolina",fecha:"09-01"},
+  {nombre:"Erika",fecha:"09-07"},
+  {nombre:"Dumar",fecha:"10-30"},
+  {nombre:"Karol",fecha:"11-15"},
+  {nombre:"Coste",fecha:"10-06"}
+];
 
-  let calendar;
+const colors=["c1","c2","c3","c4","c5"];
 
-  function buildEvents(forYear){
-    return data.map(p => {
-      const d = new Date(p.fecha);
-      const mm = String(d.getMonth() + 1).padStart(2, '0');
-      const dd = String(d.getDate()).padStart(2, '0');
+function buildEvents(year){
+  return cumpleanios.map((c,i)=>({
+    start:`${year}-${c.fecha}`,
+    allDay:true,
+    classNames:[colors[i%colors.length]],
+    extendedProps:{nombre:c.nombre}
+  }));
+}
 
-      return {
-        title: `🎂 ${p.nombre}`,
-        start: `${forYear}-${mm}-${dd}T12:00:00`, // MEDIODÍA = sin desfase
-        allDay: true
-      };
-    });
-  }
-
-  calendar = new FullCalendar.Calendar(
-    document.getElementById('calendar'),
+document.addEventListener("DOMContentLoaded",()=>{
+  const calendar=new FullCalendar.Calendar(
+    document.getElementById("calendar"),
     {
-      initialView: 'dayGridMonth',
-      locale: 'es',
-      height: '100%',
-      contentHeight: '100%',
-      expandRows: true,
-      fixedWeekCount: true,
-      aspectRatio: 1.35,
-
-      // 🔁 Se ejecuta al cambiar mes o año
-      datesSet: function(info){
-        const visibleYear = info.start.getFullYear();
+      locale:"es",
+      initialView:"dayGridMonth",
+      fixedWeekCount:true,
+      showNonCurrentDates:false,
+      height:"auto",
+      events:buildEvents(new Date().getFullYear()),
+      headerToolbar:{
+        left:"prev,today,next",
+        center:"title",
+        right:""
+      },
+      datesSet(info){
         calendar.removeAllEvents();
-        calendar.addEventSource(buildEvents(visibleYear));
+        calendar.addEventSource(buildEvents(info.start.getFullYear()));
+      },
+      eventContent(arg){
+        const color=arg.event.classNames[0];
+        return{
+          html:`<div class="cloud ${color}">🎂 ${arg.event.extendedProps.nombre}</div>`
+        };
       }
     }
   );
-
   calendar.render();
-
-  // Cargar eventos del año inicial
-  const initialYear = calendar.getDate().getFullYear();
-  calendar.addEventSource(buildEvents(initialYear));
-
 });
 </script>
 
-
 </body>
 </html>
-
