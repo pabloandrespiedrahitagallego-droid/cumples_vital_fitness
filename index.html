@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Calendario de Cumpleaños</title>
+<style>
+  body { font-family: Arial; }
+  .day { display:inline-block; width:40px; height:40px; margin:3px; text-align:center; line-height:40px; }
+  .birthday { background:#ffd700; border-radius:50%; }
+</style>
+</head>
+<body>
+
+<h2>🎂 Cumpleaños del mes</h2>
+<div id="calendar"></div>
+
+<script>
+fetch('cumples.json')
+.then(r => r.json())
+.then(data => {
+  const cal = document.getElementById("calendar");
+  for(let d=1; d<=31; d++){
+    const div = document.createElement("div");
+    div.className = "day";
+    div.textContent = d;
+
+    data.forEach(p => {
+      const fecha = new Date(p.fecha);
+      if(fecha.getDate() === d){
+        div.classList.add("birthday");
+        div.title = p.nombre;
+      }
+    });
+
+    cal.appendChild(div);
+  }
+});
+</script>
+
+</body>
+</html>
