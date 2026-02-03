@@ -1,17 +1,18 @@
 [
-  { "nombre": "Pablo", "fecha": "2026-02-06" },
-  { "nombre": "Susana", "fecha": "2026-02-15" },
-  { "nombre": "Melissa", "fecha": "2026-03-25" },
-  { "nombre": "Samuel", "fecha": "2026-04-03" },
-  { "nombre": "Estefania", "fecha": "2026-05-29" },
-  { "nombre": "Julián", "fecha": "2026-06-06" },
-  { "nombre": "Laura", "fecha": "2026-06-14" },
-  { "nombre": "Angie", "fecha": "2026-08-02" },
-  { "nombre": "Carolina", "fecha": "2026-09-01" },
-  { "nombre": "Erika", "fecha": "2026-09-07" },
-  { "nombre": "Dumar", "fecha": "2026-10-30" },
-  { "nombre": "Karol", "fecha": "2026-11-15" },
-  { "nombre": "Manuela", "fecha": "2026-06-03" },
-  { "nombre": "Coste", "fecha": "2026-10-06" }
+  { "nombre": "Pablo", "fecha": "2026-02-07" },
+  { "nombre": "Susana", "fecha": "2026-02-16" },
+  { "nombre": "Melissa", "fecha": "2026-03-26" },
+  { "nombre": "Samuel", "fecha": "2026-04-04" },
+  { "nombre": "Estefania", "fecha": "2026-05-30" },
+  { "nombre": "Julián", "fecha": "2026-06-07" },
+  { "nombre": "Laura", "fecha": "2026-06-15" },
+  { "nombre": "Angie", "fecha": "2026-08-03" },
+  { "nombre": "Carolina", "fecha": "2026-09-02" },
+  { "nombre": "Erika", "fecha": "2026-09-08" },
+  { "nombre": "Dumar", "fecha": "2026-10-31" },
+  { "nombre": "Karol", "fecha": "2026-11-16" },
+  { "nombre": "Manuela", "fecha": "2026-06-04" },
+  { "nombre": "Coste", "fecha": "2026-10-07" }
 ]
+
 
