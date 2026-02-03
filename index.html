@@ -1,156 +1,114 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🎉 Cumpleaños</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.css">
-<script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.js"></script>
+<!-- FullCalendar -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
+<!-- Fuente -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet">
 
 <style>
 *{ box-sizing:border-box; }
 
-html, body{
+html,body{
   margin:0;
   padding:0;
   height:100%;
-  overflow:hidden;
   font-family:'Inter', sans-serif;
+  background: radial-gradient(circle at top,#475569,#334155);
 }
 
-/* Fondo premium (más claro) */
-body{
-  background: radial-gradient(circle at top, #475569, #334155);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* App */
+/* ===== APP ===== */
 .app{
-  width:100%;
-  max-width:900px;
-  height:100%;
-  max-height:620px;
+  max-width:1100px;
+  margin:30px auto;
+  padding:20px;
   background:linear-gradient(180deg,#1e293b,#0f172a);
-  border-radius:32px;
-  padding:16px;
+  border-radius:28px;
   box-shadow:0 30px 60px rgba(0,0,0,.4);
-  display:flex;
-  flex-direction:column;
+  color:#f8fafc;
 }
 
 /* Header */
 .header{
   text-align:center;
-  margin-bottom:12px;
+  margin-bottom:20px;
 }
-
 .header h1{
   margin:0;
-  font-size:1.3rem;
-  color:#f8fafc;
+  font-size:1.5rem;
 }
-
 .header span{
-  font-size:0.75rem;
+  font-size:.8rem;
   color:#cbd5f5;
 }
 
 /* Layout */
-.content{
-  flex:1;
-  display:flex;
-  gap:14px;
+.layout{
+  display:grid;
+  grid-template-columns: 2.2fr 1fr;
+  gap:20px;
 }
 
-/* Cards */
-.calendar-card,
+/* ===== CALENDAR CARD ===== */
+.calendar-card{
+  background:#0f172a;
+  border-radius:24px;
+  padding:16px;
+}
+
+/* ===== FULLCALENDAR CUSTOM ===== */
+.fc{
+  color:#e5e7eb;
+}
+.fc-toolbar-title{
+  font-size:1.1rem;
+}
+.fc-button{
+  background:#334155 !important;
+  border:none !important;
+  border-radius:10px !important;
+}
+.fc-daygrid-day-number{
+  color:#cbd5f5;
+  font-weight:600;
+}
+
+/* Día con cumpleaños (MUY NOTORIO) */
+.fc-event{
+  background:linear-gradient(135deg,#fde68a,#facc15) !important;
+  border:none !important;
+  border-radius:14px;
+  padding:6px 8px;
+  font-size:.75rem;
+  font-weight:700;
+  color:#78350f;
+  box-shadow:0 6px 18px rgba(250,204,21,.6);
+  animation:pulse 1.6s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{ transform:scale(1); }
+  50%{ transform:scale(1.04); }
+}
+
+/* ===== SIDE CARD ===== */
 .side-card{
   background:#0f172a;
   border-radius:24px;
-  padding:14px;
-  display:flex;
-  flex-direction:column;
-}
-
-/* Calendar full size */
-.calendar-card{
-  flex:2;
-}
-
-#calendar{
-  flex:1;
-  display:flex;
-}
-
-/* VanillaCalendar full height */
-.vanilla-calendar{
-  flex:1;
-  height:100%;
-  color:#e5e7eb;
-}
-
-/* Día normal */
-.vanilla-calendar-day__btn{
-  border-radius:14px !important;
-}
-
-/* 🎂 Día con cumpleaños */
-.birthday-day{
-  background:linear-gradient(135deg,#fde68a,#facc15) !important;
-  color:#78350f !important;
-  font-weight:700;
-  box-shadow:0 6px 16px rgba(250,204,21,.55);
+  padding:16px;
   position:relative;
 }
 
-.birthday-day::after{
-  content:"🎂";
-  position:absolute;
-  bottom:2px;
-  right:4px;
-  font-size:0.85rem;
-}
-
-/* Side card */
-.side-card{
-  flex:1;
-}
-
-/* Header lateral */
-.side-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
-}
-
-.side-header h2{
-  margin:0;
-  font-size:0.9rem;
+.side-card h2{
+  margin:0 0 12px 0;
+  font-size:1rem;
   color:#fde68a;
-}
-
-.nav-btns{
-  display:flex;
-  gap:6px;
-}
-
-.nav-btns button{
-  background:#1e293b;
-  border:none;
-  color:#e5e7eb;
-  border-radius:10px;
-  padding:4px 8px;
-  cursor:pointer;
-}
-
-.nav-btns button:hover{
-  background:#334155;
 }
 
 /* Lista */
@@ -158,33 +116,26 @@ body{
   list-style:none;
   padding:0;
   margin:0;
-  flex:1;
 }
-
 .side-card li{
+  background:#1e293b;
+  padding:12px;
+  border-radius:16px;
+  margin-bottom:10px;
   display:flex;
   align-items:center;
   gap:10px;
-  background:#1e293b;
-  padding:10px 12px;
-  border-radius:16px;
-  margin-bottom:8px;
-  font-size:0.75rem;
-  color:#e5e7eb;
+  font-size:.8rem;
   box-shadow:0 4px 10px rgba(0,0,0,.25);
 }
-
 .side-card li span{
-  font-size:1.2rem;
+  font-size:1.3rem;
 }
 
 /* Responsive */
-@media(max-width:768px){
-  .content{
-    flex-direction:column;
-  }
-  .app{
-    max-width:420px;
+@media(max-width:900px){
+  .layout{
+    grid-template-columns:1fr;
   }
 }
 </style>
@@ -198,91 +149,70 @@ body{
     <span>Fechas importantes del grupo</span>
   </div>
 
-  <div class="content">
+  <div class="layout">
     <div class="calendar-card">
       <div id="calendar"></div>
     </div>
 
     <div class="side-card">
-      <div class="side-header">
-        <h2 id="monthTitle"></h2>
-        <div class="nav-btns">
-          <button id="prevMonth">◀</button>
-          <button id="nextMonth">▶</button>
-        </div>
-      </div>
-      <ul id="monthBirthdays"></ul>
+      <h2 id="sideTitle"></h2>
+      <ul id="sideList"></ul>
     </div>
   </div>
 </div>
 
 <script>
 fetch('cumples.json')
-.then(r => r.json())
-.then(data => {
+.then(r=>r.json())
+.then(data=>{
 
-  const monthNames = [
-    "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-    "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
-  ];
+  const year = new Date().getFullYear();
 
-  let currentDate = new Date();
-  let currentMonth = currentDate.getMonth();
-  const year = currentDate.getFullYear();
-
-  const datesConfig = {};
-  const birthdaysByMonth = {};
-
-  data.forEach(p => {
+  // Generar eventos que se repiten cada año
+  const events = data.map(p=>{
     const d = new Date(p.fecha);
-
-    const dateKey = `${year}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    datesConfig[dateKey] = { modifier: 'birthday-day' };
-
-    if(!birthdaysByMonth[d.getMonth()]){
-      birthdaysByMonth[d.getMonth()] = [];
-    }
-    birthdaysByMonth[d.getMonth()].push({
-      nombre: p.nombre,
-      dia: d.getDate()
-    });
+    return {
+      title:`🎂 ${p.nombre}`,
+      start:`${year}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,
+      allDay:true
+    };
   });
 
-  function renderSide(month){
-    document.getElementById("monthTitle").textContent = `🎂 ${monthNames[month]}`;
-    const list = document.getElementById("monthBirthdays");
+  const calendar = new FullCalendar.Calendar(
+    document.getElementById('calendar'),
+    {
+      initialView:'dayGridMonth',
+      locale:'es',
+      height:'auto',
+      events:events,
+      datesSet:(info)=>{
+        renderSide(info.start);
+      }
+    }
+  );
 
-    const items = birthdaysByMonth[month] || [];
-    list.innerHTML = items.length
-      ? items
-          .sort((a,b)=>a.dia-b.dia)
-          .map(p => `<li><span>🎉</span>${p.nombre} · ${p.dia}</li>`)
-          .join("")
-      : `<li><span>😴</span>No hay cumpleaños este mes</li>`;
+  calendar.render();
+
+  function renderSide(date){
+    const month = date.getMonth();
+    const monthNames = [
+      "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+    ];
+
+    document.getElementById('sideTitle').textContent = `🎂 ${monthNames[month]}`;
+
+    const list = data
+      .filter(p=> new Date(p.fecha).getMonth()===month)
+      .sort((a,b)=> new Date(a.fecha).getDate()-new Date(b.fecha).getDate())
+      .map(p=>{
+        const d = new Date(p.fecha).getDate();
+        return `<li><span>🎉</span>${p.nombre} · ${d}</li>`;
+      });
+
+    document.getElementById('sideList').innerHTML =
+      list.length ? list.join('') : `<li><span>😴</span>No hay cumpleaños</li>`;
   }
-
-  const calendar = new VanillaCalendar('#calendar', {
-    settings:{
-      lang:'es',
-      selection:{ day:false },
-      dates: datesConfig
-    }
-  });
-
-  calendar.init();
-  renderSide(currentMonth);
-
-  document.getElementById("prevMonth").onclick = () => {
-    currentMonth--;
-    calendar.prevMonth();
-    renderSide((currentMonth + 12) % 12);
-  };
-
-  document.getElementById("nextMonth").onclick = () => {
-    currentMonth++;
-    calendar.nextMonth();
-    renderSide(currentMonth % 12);
-  };
 
 });
 </script>
